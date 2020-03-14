@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+<div class="form">
+    <label for="Name">Имя:</label><input class="field" type="text" id="Name" autofocus>
+    <label for="Tel">Телефон :</label><input class="field" type="text" id="Tel" placeholder="+7(495)123-4567">
+    <label for="Email">e-mail:</label><input class="field" type="text" id="Email" placeholder="mymail@mail.ru">
+    <label for="comment">Комментарий:</label><textarea class="field" id="comment" cols="40" rows="3"></textarea>
+    <p><a href="#" onclick="checks();" class="button">Отправить</a></p>
+    <div class="check-result"></div>
+</div>
+<script>
+    function checks() {
+        document.querySelectorAll(".field_error").forEach(el => el.classList.remove("field_error"));
+        let result = "";
+        let str;
+        let isBad;
+        //Имя:
+        str = document.getElementById("Name").value;
+        let regExp = /[^а-я a-z]/ig;
+        isBad = regExp.test(str);
+        if (isBad) {
+            result = "Формат имени не верен!\n";
+            document.getElementById("Name").classList.add("field_error");
+        }
+        //Телефон:
+        //ToDo можно добавить маску для автоматического проставления +7().-.., но нужен jQuery
+        str = document.getElementById("Tel").value;
+        regExp = /^(\+7\(\d{3}\)\d{3}-)(\d{4})$/ig;
+        isBad=!regExp.test(str);
+        if (isBad) {
+            result += "Формат телефона не верен!\n";
+            document.getElementById("Tel").classList.add("field_error");
+        }
+        //Email
+        str = document.getElementById("Email").value;
+        regExp = /^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$/ig;
+        if (!regExp.test(str)) {
+            result += "Формат e-mail не верен!\n";
+            document.getElementById("Email").classList.add("field_error");
+        }
+        //Выводим результат:
+        if (result === "") result = "Всё хорошо!";
+            document.querySelector(".check-result").innerHTML = result;
+    }
+</script>
+</body>
+</html>
